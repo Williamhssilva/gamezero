@@ -138,3 +138,26 @@ h1 {
     color: #888; /* Cor mais clara para diferenciar */
     margin-top: 5px; /* Espaçamento acima */
 }
+
+.finished-badge {
+    display: inline-block;
+    background-color: #4caf50; /* Verde */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.badge-container {
+    position: relative;
+}
+
+.finished-badge {
+    position: absolute;
+    top: 10px; /* Ajuste a posição conforme necessário */
+    left: 10px; /* Ajuste a posição conforme necessário */
+    width: 30px; /* Ajuste o tamanho conforme necessário */
+    height: 30px; /* Ajuste o tamanho conforme necessário */
+    z-index: 10; /* Certifique-se de que a etiqueta esteja acima da imagem */
+}

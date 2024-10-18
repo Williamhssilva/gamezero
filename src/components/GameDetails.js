@@ -1,5 +1,5 @@
 // src/GameDetails.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick'; // Importa o carrossel
 import FullScreenImageModal from './FullScreenImageModal'; // Importe o novo componente
 
@@ -7,6 +7,12 @@ function GameDetails({ game, onClose }) {
     const [isFullScreenOpen, setIsFullScreenOpen] = useState(false);
     const [fullScreenImageUrl, setFullScreenImageUrl] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isFinished, setIsFinished] = useState(false);
+
+    useEffect(() => {
+        const finishedGames = JSON.parse(localStorage.getItem('finishedGames')) || [];
+        setIsFinished(finishedGames.includes(game.id));
+    }, [game.id]);
 
     // Configurações do carrossel
     const settings = {
@@ -37,6 +43,18 @@ function GameDetails({ game, onClose }) {
         }
     };
 
+    const markAsFinished = () => {
+        const finishedGames = JSON.parse(localStorage.getItem('finishedGames')) || [];
+        if (!finishedGames.includes(game.id)) {
+            finishedGames.push(game.id);
+            localStorage.setItem('finishedGames', JSON.stringify(finishedGames));
+            setIsFinished(true); // Atualiza o estado para refletir que o jogo foi finalizado
+            alert(`${game.name} foi marcado como finalizado!`);
+        } else {
+            alert(`${game.name} já está marcado como finalizado.`);
+        }
+    };
+
     return (
         <div className="details-container">
             <button className="modal-close" onClick={onClose}>✖</button>
@@ -46,6 +64,11 @@ function GameDetails({ game, onClose }) {
                 <h2>Descrição</h2>
                 <p>{game.description || 'Descrição não disponível.'}</p>
             </div>
+            <button onClick={markAsFinished}>
+                {isFinished ? 'Jogo Finalizado' : 'Marcar como Finalizado'}
+            </button>
+            {/* Exibir mensagem se o jogo foi finalizado */}
+            {isFinished && <p>Você já finalizou este jogo!</p>}
             <div className="game-info">
                 <div className="info-card">
                     <h3>Desenvolvedores</h3>

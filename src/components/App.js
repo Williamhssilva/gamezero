@@ -1,9 +1,11 @@
 // src/components/App.js
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import '../styles/App.css'; // Corrigido para o caminho correto
 import GameDetails from './GameDetails'; // Corrigido para o caminho correto
 import Modal from './Modal'; // Corrigido para o caminho correto
+import Filters from './Filters'; // Importar o novo componente
+import FinishedGamesDashboard from './FinishedGamesDashboard'; // Importar o novo componente
 
 function App() {
     const [games, setGames] = useState([]);
@@ -15,16 +17,18 @@ function App() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedGame, setSelectedGame] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [finishedGames, setFinishedGames] = useState([]);
 
     useEffect(() => {
         const fetchGames = async () => {
+            setLoading(true);
             try {
                 let url = `https://api.rawg.io/api/games?key=ae2d749a724648bdafdf8c21deaffa86&page=${page}&page_size=20`;
                 if (genre) url += `&genres=${genre}`;
                 if (ordering) url += `&ordering=${ordering}`;
                 if (platform) url += `&platforms=${platform}`;
                 if (searchTerm) url += `&search=${searchTerm}`;
-                
+
                 const response = await fetch(url);
                 const data = await response.json();
                 setGames(data.results || []);
@@ -38,6 +42,11 @@ function App() {
 
         fetchGames();
     }, [page, genre, ordering, platform, searchTerm]);
+
+    useEffect(() => {
+        const savedGames = JSON.parse(localStorage.getItem('finishedGames')) || [];
+        setFinishedGames(savedGames);
+    }, []);
 
     const openModal = (game) => {
         setSelectedGame(game);
@@ -57,54 +66,46 @@ function App() {
         <Router>
             <div className="app-container">
                 <h1>Jogos</h1>
-                <div className="filters">
-                    <input
-                        type="text"
-                        placeholder="Pesquisar por nome do jogo"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <select onChange={(e) => setGenre(e.target.value)} value={genre}>
-                        <option value="">Todos os Gêneros</option>
-                        <option value="action">Ação</option>
-                        <option value="adventure">Aventura</option>
-                        <option value="rpg">RPG</option>
-                    </select>
-                    <select onChange={(e) => setPlatform(e.target.value)} value={platform}>
-                        <option value="">Todas as Plataformas</option>
-                        <option value="pc">PC</option>
-                        <option value="playstation">PlayStation</option>
-                        <option value="xbox">Xbox</option>
-                    </select>
-                    <select onChange={(e) => setOrdering(e.target.value)} value={ordering}>
-                        <option value="">Ordenar por</option>
-                        <option value="-released">Data de Lançamento (Mais Recente)</option>
-                        <option value="released">Data de Lançamento (Mais Antigo)</option>
-                        <option value="-rating">Classificação (Mais Alta)</option>
-                        <option value="rating">Classificação (Mais Baixa)</option>
-                    </select>
-                </div>
-                <div className="card-container">
-                    {Array.isArray(games) && games.length > 0 ? (
-                        games.map(game => (
-                            <div key={game.id} className="card" onClick={() => openModal(game)}>
-                                <img src={game.background_image} alt={game.name} className="card-image" />
-                                <h2 className="card-title">{game.name}</h2>
-                                <p className="card-release-date">{game.released}</p>
-                                <p className="card-rating">Classificação: {game.rating}</p>
-                                <p className="card-genres">Gêneros: {game.genres.map(genre => genre.name).join(', ')}</p>
-                                <p className="card-platforms">Plataformas: {game.platforms.map(platform => platform.platform.name).join(', ')}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <div>Nenhum jogo encontrado.</div>
-                    )}
-                </div>
-                <div className="pagination">
-                    <button onClick={() => setPage(prev => Math.max(prev - 1, 1))}>Anterior</button>
-                    <span>Página {page}</span>
-                    <button onClick={() => setPage(prev => prev + 1)}>Próxima</button>
-                </div>
+                <nav>
+                    <Link to="/">Home</Link>
+                    <Link to="/finished">Jogos Finalizados</Link>
+                </nav>
+                <Filters
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    genre={genre}
+                    setGenre={setGenre}
+                    platform={platform}
+                    setPlatform={setPlatform}
+                    ordering={ordering}
+                    setOrdering={setOrdering}
+                />
+                <Routes>
+                    <Route path="/finished" element={<FinishedGamesDashboard />} />
+                    <Route path="/" element={
+                        <div className="card-container">
+                            {Array.isArray(games) && games.length > 0 ? (
+                                games.map(game => (
+                                    <div key={game.id} className="card" onClick={() => openModal(game)}>
+                                        <div className="badge-container">
+                                            {finishedGames.includes(game.id) && (
+                                                <i className="fas fa-check finished-badge"></i> // Usando o ícone de check
+                                            )}
+                                        </div>
+                                        <img src={game.background_image} alt={game.name} className="card-image" />
+                                        <h2 className="card-title">{game.name}</h2>
+                                        <p className="card-release-date">{game.released}</p>
+                                        <p className="card-rating">Classificação: {game.rating}</p>
+                                        <p className="card-genres">Gêneros: {game.genres.map(genre => genre.name).join(', ')}</p>
+                                        <p className="card-platforms">Plataformas: {game.platforms.map(platform => platform.platform.name).join(', ')}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div>Nenhum jogo encontrado.</div>
+                            )}
+                        </div>
+                    } />
+                </Routes>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>
