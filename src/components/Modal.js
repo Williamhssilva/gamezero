@@ -1,6 +1,6 @@
-// src/Modal.js
+// src/components/Modal.js
 import React from 'react';
-import './Modal.css'; // Importe o CSS para a modal
+import '../styles/Modal.css'; // Corrigido para o caminho correto
 
 const Modal = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;

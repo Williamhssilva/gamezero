@@ -1,6 +1,6 @@
-// src/FullScreenImageModal.js
+// src/components/FullScreenImageModal.js
 import React from 'react';
-import './FullScreenImageModal.css'; // Importe o CSS para a modal de tela cheia
+import '../styles/FullScreenImageModal.css'; // Corrigido para o caminho correto
 
 const FullScreenImageModal = ({ isOpen, onClose, imageUrl, images, currentIndex, onNext, onPrev }) => {
     if (!isOpen) return null;

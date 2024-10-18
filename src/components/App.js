@@ -1,9 +1,9 @@
-// src/App.js
+// src/components/App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import './App.css';
-import GameDetails from '../GameDetails'; // Importe o componente GameDetails
-import Modal from '../Modal'; // Importe o componente Modal
+import '../styles/App.css'; // Corrigido para o caminho correto
+import GameDetails from './GameDetails'; // Corrigido para o caminho correto
+import Modal from './Modal'; // Corrigido para o caminho correto
 
 function App() {
     const [games, setGames] = useState([]);
@@ -11,8 +11,8 @@ function App() {
     const [page, setPage] = useState(1);
     const [genre, setGenre] = useState('');
     const [ordering, setOrdering] = useState('');
-    const [platform, setPlatform] = useState(''); // Estado para plataforma
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para pesquisa
+    const [platform, setPlatform] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
     const [selectedGame, setSelectedGame] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,18 +20,11 @@ function App() {
         const fetchGames = async () => {
             try {
                 let url = `https://api.rawg.io/api/games?key=ae2d749a724648bdafdf8c21deaffa86&page=${page}&page_size=20`;
-                if (genre) {
-                    url += `&genres=${genre}`;
-                }
-                if (ordering) {
-                    url += `&ordering=${ordering}`;
-                }
-                if (platform) {
-                    url += `&platforms=${platform}`; // Adiciona filtro de plataforma
-                }
-                if (searchTerm) {
-                    url += `&search=${searchTerm}`; // Adiciona pesquisa por nome
-                }
+                if (genre) url += `&genres=${genre}`;
+                if (ordering) url += `&ordering=${ordering}`;
+                if (platform) url += `&platforms=${platform}`;
+                if (searchTerm) url += `&search=${searchTerm}`;
+                
                 const response = await fetch(url);
                 const data = await response.json();
                 setGames(data.results || []);
@@ -100,7 +93,7 @@ function App() {
                                 <p className="card-release-date">{game.released}</p>
                                 <p className="card-rating">Classificação: {game.rating}</p>
                                 <p className="card-genres">Gêneros: {game.genres.map(genre => genre.name).join(', ')}</p>
-                                <p className="card-platforms">Plataformas: {game.platforms.map(platform => platform.platform.name).join(', ')}</p> {/* Adicionando plataformas */}
+                                <p className="card-platforms">Plataformas: {game.platforms.map(platform => platform.platform.name).join(', ')}</p>
                             </div>
                         ))
                     ) : (
