@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# GameZero
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+GameZero é uma aplicação web desenvolvida em React que permite aos usuários fazerem a gestão dos seus jogos terminados. A aplicação utiliza a API RAWG para buscar informações sobre jogos, incluindo detalhes, imagens e vídeos.
 
-## Available Scripts
+## Funcionalidades
 
-In the project directory, you can run:
+- **Pesquisa de Jogos**: Os usuários podem pesquisar jogos por nome.
+- **Filtros**: Filtre jogos por gênero, plataforma e ordenação.
+- **Detalhes do Jogo**: Visualize detalhes completos de cada jogo, incluindo desenvolvedores, editores, gêneros e plataformas.
+- **Modal de Imagem**: Visualize imagens em um carrossel e abra uma visualização em tela cheia.
+- **Responsividade**: A aplicação é responsiva e funciona bem em dispositivos móveis.
 
-### `npm start`
+## Tecnologias Utilizadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React**: Biblioteca JavaScript para construir interfaces de usuário.
+- **React Router**: Para navegação entre componentes.
+- **Slick Carousel**: Para exibir imagens em um carrossel.
+- **CSS**: Para estilização da aplicação.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Instalação
 
-### `npm test`
+Para rodar a aplicação localmente, siga os passos abaixo:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Williamhssilva/gamezero.git
+   ```
 
-### `npm run build`
+2. Navegue até o diretório do projeto:
+   ```bash
+   cd gamezero
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Adicione sua chave da API RAWG no arquivo `App.js`:
+   ```javascript
+   const url = `https://api.rawg.io/api/games?key=YOUR_API_KEY&page=${page}&page_size=20`;
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Inicie a aplicação:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+## Uso
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Após iniciar a aplicação, você pode:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Pesquisar jogos usando a barra de pesquisa.
+- Filtrar jogos por gênero e plataforma.
+- Clicar em um jogo para ver mais detalhes.
+- Navegar pelas imagens do jogo em um carrossel e abrir uma visualização em tela cheia.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Contribuição
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Contribuições são bem-vindas! Sinta-se à vontade para abrir um problema ou enviar um pull request.
 
-## Learn More
+## Contato
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Para mais informações, entre em contato com [williamhss90@gmail.com](mailto:williamhss90@gmail.com).
