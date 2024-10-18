@@ -1,0 +1,57 @@
+/* src/FullScreenImageModal.css */
+.fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9); /* Fundo escuro com opacidade */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; /* Acima da modal principal */
+}
+
+.fullscreen-content {
+    position: relative;
+}
+
+.fullscreen-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+.fullscreen-prev,
+.fullscreen-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #ffffff;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1002; /* Acima da imagem */
+}
+
+.fullscreen-prev {
+    left: 10px;
+}
+
+.fullscreen-next {
+    right: 10px;
+}
+
+.fullscreen-image {
+    max-width: 90vw; /* Limita a largura da imagem */
+    max-height: 90vh; /* Limita a altura da imagem */
+    border-radius: 10px;
+}
