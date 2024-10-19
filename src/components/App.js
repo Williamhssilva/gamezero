@@ -6,6 +6,7 @@ import GameDetails from './GameDetails'; // Corrigido para o caminho correto
 import Modal from './Modal'; // Corrigido para o caminho correto
 import Filters from './Filters'; // Importar o novo componente
 import FinishedGamesDashboard from './FinishedGamesDashboard'; // Importar o novo componente
+import useDebounce from '../hooks/useDebounce'; // Importe o hook de debounce
 
 function App() {
     const [games, setGames] = useState([]);
@@ -19,6 +20,8 @@ function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [finishedGames, setFinishedGames] = useState([]);
 
+    const debouncedSearchTerm = useDebounce(searchTerm, 300); // Use o debounce
+
     useEffect(() => {
         const fetchGames = async () => {
             setLoading(true);
@@ -27,8 +30,8 @@ function App() {
                 if (genre) url += `&genres=${genre}`;
                 if (ordering) url += `&ordering=${ordering}`;
                 if (platform) url += `&platforms=${platform}`;
-                if (searchTerm) url += `&search=${searchTerm}`;
-
+                if (debouncedSearchTerm) url += `&search=${debouncedSearchTerm}`;
+                
                 const response = await fetch(url);
                 const data = await response.json();
                 setGames(data.results || []);
@@ -41,7 +44,7 @@ function App() {
         };
 
         fetchGames();
-    }, [page, genre, ordering, platform, searchTerm]);
+    }, [page, genre, ordering, platform, debouncedSearchTerm]); // Use o debouncedSearchTerm
 
     useEffect(() => {
         const savedGames = JSON.parse(localStorage.getItem('finishedGames')) || [];
@@ -57,6 +60,13 @@ function App() {
         setIsModalOpen(false);
         setSelectedGame(null);
     };
+
+    const filteredGames = games.filter(game => {
+        const matchesSearch = game.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+        const matchesGenre = genre ? game.genres.some(g => g.name.toLowerCase() === genre.toLowerCase()) : true;
+        const matchesPlatform = platform ? game.platforms.some(p => p.platform.name.toLowerCase() === platform.toLowerCase()) : true;
+        return matchesSearch && matchesGenre && matchesPlatform;
+    });
 
     if (loading) {
         return <div>Carregando...</div>;
@@ -80,32 +90,27 @@ function App() {
                     ordering={ordering}
                     setOrdering={setOrdering}
                 />
-                <Routes>
-                    <Route path="/finished" element={<FinishedGamesDashboard />} />
-                    <Route path="/" element={
-                        <div className="card-container">
-                            {Array.isArray(games) && games.length > 0 ? (
-                                games.map(game => (
-                                    <div key={game.id} className="card" onClick={() => openModal(game)}>
-                                        <div className="badge-container">
-                                            {finishedGames.includes(game.id) && (
-                                                <i className="fas fa-check finished-badge"></i> // Usando o ícone de check
-                                            )}
-                                        </div>
-                                        <img src={game.background_image} alt={game.name} className="card-image" />
-                                        <h2 className="card-title">{game.name}</h2>
-                                        <p className="card-release-date">{game.released}</p>
-                                        <p className="card-rating">Classificação: {game.rating}</p>
-                                        <p className="card-genres">Gêneros: {game.genres.map(genre => genre.name).join(', ')}</p>
-                                        <p className="card-platforms">Plataformas: {game.platforms.map(platform => platform.platform.name).join(', ')}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <div>Nenhum jogo encontrado.</div>
-                            )}
-                        </div>
-                    } />
-                </Routes>
+                <div className="card-container">
+                    {Array.isArray(filteredGames) && filteredGames.length > 0 ? (
+                        filteredGames.map(game => (
+                            <div key={game.id} className="card" onClick={() => openModal(game)}>
+                                <div className="badge-container">
+                                    {finishedGames.includes(game.id) && (
+                                        <i className="fas fa-check finished-badge"></i>
+                                    )}
+                                </div>
+                                <img src={game.background_image} alt={game.name} className="card-image" />
+                                <h2 className="card-title">{game.name}</h2>
+                                <p className="card-release-date">{game.released}</p>
+                                <p className="card-rating">Classificação: {game.rating}</p>
+                                <p className="card-genres">Gêneros: {Array.isArray(game.genres) ? game.genres.map(genre => genre.name).join(', ') : 'N/A'}</p>
+                                <p className="card-platforms">Plataformas: {Array.isArray(game.platforms) ? game.platforms.map(platform => platform.platform.name).join(', ') : 'N/A'}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <div>Nenhum jogo encontrado.</div>
+                    )}
+                </div>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={closeModal}>

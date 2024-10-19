@@ -2,8 +2,19 @@
 import React from 'react';
 
 const Filters = ({ searchTerm, setSearchTerm, genre, setGenre, platform, setPlatform, ordering, setOrdering }) => {
+    const clearFilters = () => {
+        setSearchTerm('');
+        setGenre('');
+        setPlatform('');
+        setOrdering('');
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault(); // Previne o comportamento padrão do formulário
+    };
+
     return (
-        <div className="filters">
+        <form className="filters" onSubmit={handleSubmit}>
             <input
                 type="text"
                 placeholder="Pesquisar por nome do jogo"
@@ -29,7 +40,8 @@ const Filters = ({ searchTerm, setSearchTerm, genre, setGenre, platform, setPlat
                 <option value="-rating">Classificação (Mais Alta)</option>
                 <option value="rating">Classificação (Mais Baixa)</option>
             </select>
-        </div>
+            <button type="button" onClick={clearFilters}>Limpar Filtros</button>
+        </form>
     );
 };
 
